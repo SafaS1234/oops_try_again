@@ -3,13 +3,13 @@
 
 using namespace std;
 
-//checks if 
+//checks range
 bool range(int input, int min, int max)
 {
     return cin.peek() =='\n' && input >= min && input <= max; 
 }
 
-//checks if  
+//places the error message and input message at the appropriate places 
 int inputValidation(int min, int max, const string inputMessage, 
                     const string errorMessage)
 {
