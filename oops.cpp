@@ -9,6 +9,21 @@ bool range(int input, int min, int max)
     return cin.peek() =='\n' && input >= min && input <= max; 
 }
 
+//converts a string to an integer
+int stringToInt(const string& str) {
+    int num = 0;
+    char dig;
+
+    for (size_t i = 0; i < str.size(); ++i) {
+        dig = str[i];
+        if (isdigit(dig)) {
+            num = num * 10 + (dig - '0');
+        }
+    }
+
+    return num;
+}
+
 //places the error message and input message at the appropriate places 
 int inputValidation(int min, int max, const string inputMessage, 
                     const string errorMessage, int def_val = 100)
@@ -22,22 +37,37 @@ int inputValidation(int min, int max, const string inputMessage,
         cout << inputMessage;
         cin >> user_input;
 
-        if (user_input == "default")
+        if (user_input == "exit")
         {
-            input = def_val;
-            valid = true;
-        }
-        else if(cin >> input && range(input, min, max))
-        {
-            valid = true;
+            return -1;
         }
 
+        else if (user_input == "default")
+        {
+            return def_val;
+
+        }
+
+        //for numbers
         else
         {
+            if (isdigit(user_input[0])) {
+                // Convert string to integer
+                input = stringToInt(user_input);
+                if (range(input, min, max)) {
+                    valid = true;
+                } else {
+                    cout << errorMessage << endl;
+                }
+            } else {
+                cout << errorMessage << endl;
+            }
+
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << errorMessage << endl;
+
         }
+
     }
 
     return input;
@@ -48,15 +78,19 @@ int main()
 {
     int min = 0,
         max = 100,
+        def_value = 100,
         userValue;
-    string inputMessage = "Please enter a value (\"default\" = 100) \n",
+    string inputMessage = "Please enter a value (\"default\" = 100,) \n",
            errorMessage = "Your value is invalid. \n";
     
-    userValue = inputValidation(min, max, inputMessage, errorMessage);
+    userValue = inputValidation(min, max, inputMessage, errorMessage,
+                                def_value);
 
-    cout << "The value chose by the user is " << userValue << endl;
+    if (userValue != -1)
+    {
+        cout << "The value chosen by the user is " << userValue << endl;
+    }
 
     return 0;
-
 }
 
